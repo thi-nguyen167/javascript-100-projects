@@ -1,0 +1,178 @@
+<!doctype html>
+<html class="light" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>JS Journal | 100 Projects Challenge</title>
+
+    <link href="./output.css" rel="stylesheet" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body
+    class="font-body-md text-body-md overflow-x-hidden bg-background text-primary"
+  >
+    <main class="min-h-screen bg-background flex flex-col w-full">
+      <header
+        class="sticky top-0 w-full h-20 bg-background/80 backdrop-blur-md border-b border-outline-variant flex justify-between items-center px-margin-desktop z-40"
+      >
+        <div class="flex items-center gap-8">
+          <span class="font-headline-md text-headline-md text-primary font-bold"
+            >JS Journal</span
+          >
+        </div>
+      </header>
+
+      <section
+        class="max-w-7xl px-margin-desktop py-16 md:py-24 mx-auto w-full"
+      >
+        <span
+          class="font-label-xs text-label-xs uppercase tracking-widest text-secondary mb-4 block"
+        >
+          Interactive Roadmap
+        </span>
+        <h2
+          class="font-headline-xl text-headline-xl text-primary leading-tight"
+        >
+          The JS Journal:<br />100 Masterclasses
+        </h2>
+        <p
+          class="font-body-lg text-body-lg text-secondary mt-8 max-w-lg leading-relaxed"
+        >
+          A definitive catalog of vanilla JavaScript mechanics. Bridging the gap
+          between raw scripting and modern frameworks through 100 purposefully
+          engineered web concepts.
+        </p>
+      </section>
+
+      <section
+        class="px-margin-desktop pb-8 border-b border-outline-variant flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6"
+      >
+        <div class="flex flex-wrap gap-3">
+          <button
+            data-filter="all"
+            class="filter-btn px-4 py-1.5 rounded-full border border-primary bg-primary text-on-primary font-label-xs uppercase tracking-widest text-[10px] transition-colors"
+          >
+            All Projects
+          </button>
+          <button
+            data-filter="1"
+            class="filter-btn px-4 py-1.5 rounded-full border border-outline-variant hover:border-primary bg-transparent text-primary font-label-xs uppercase tracking-widest text-[10px] transition-colors"
+          >
+            DOM & State
+          </button>
+          <button
+            data-filter="2"
+            class="filter-btn px-4 py-1.5 rounded-full border border-outline-variant hover:border-primary bg-transparent text-primary font-label-xs uppercase tracking-widest text-[10px] transition-colors"
+          >
+            Async & APIs
+          </button>
+          <button
+            data-filter="3"
+            class="filter-btn px-4 py-1.5 rounded-full border border-outline-variant hover:border-primary bg-transparent text-primary font-label-xs uppercase tracking-widest text-[10px] transition-colors"
+          >
+            Canvas & Graphics
+          </button>
+          <button
+            data-filter="4"
+            class="filter-btn px-4 py-1.5 rounded-full border border-outline-variant hover:border-primary bg-transparent text-primary font-label-xs uppercase tracking-widest text-[10px] transition-colors"
+          >
+            Architecture
+          </button>
+        </div>
+
+        <div
+          class="flex flex-col md:flex-row md:flex-wrap items-center gap-6 w-full lg:w-auto justify-between lg:justify-end"
+        >
+          <div
+            class="flex gap-2 items-center bg-surface-container px-4 py-2 rounded-full border border-outline-variant/30 flex-1 lg:flex-none"
+          >
+            <span class="material-symbols-outlined text-secondary scale-75"
+              >search</span
+            >
+            <input
+              id="search-input"
+              class="bg-transparent border-none outline-none focus:outline-none focus:ring-0 text-sm w-full lg:w-48 font-body-md"
+              placeholder="Search projects..."
+              type="text"
+            />
+          </div>
+
+          <div class="flex items-center gap-2">
+            <label
+              for="sort-projects"
+              class="font-label-xs text-label-xs uppercase tracking-widest text-secondary hidden sm:block"
+            >
+              Sort:
+            </label>
+            <div class="relative flex items-center group cursor-pointer">
+              <select
+                id="sort-projects"
+                class="appearance-none bg-transparent border-none py-0 pl-2 pr-5 focus:ring-0 font-label-xs uppercase tracking-widest text-primary font-bold cursor-pointer outline-none"
+              >
+                <option value="oldest">Oldest First</option>
+                <option value="newest">Newest First</option>
+              </select>
+              <span
+                class="material-symbols-outlined text-sm absolute right-0 pointer-events-none text-primary group-hover:translate-y-px transition-transform"
+              >
+                expand_more
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[1px] bg-[#E2E1DE] border-b border-outline-variant flex-1 w-full"
+        id="project-grid"
+      ></section>
+
+      <footer
+        class="px-margin-desktop py-16 flex flex-col md:flex-row justify-between border-t border-outline-variant mt-24"
+      >
+        <div>
+          <p class="font-headline-md text-primary">JS Journal</p>
+          <p class="font-label-xs text-secondary mt-2">
+            100 JAVASCRIPT PROJECT CHALLENGE FROM BEGINNER TO ADVANCED. <br />
+            DESIGNED AND DEVELOPED BY THI NGUYEN 2026.
+          </p>
+        </div>
+
+        <div class="flex flex-col gap-2 mt-8 md:mt-0">
+          <span
+            class="font-label-xs font-bold uppercase tracking-widest text-primary"
+            >Community</span
+          >
+          <a class="text-sm text-secondary hover:text-primary" href="#"
+            >Guidelines</a
+          >
+          <a class="text-sm text-secondary hover:text-primary" href="#"
+            >GitHub</a
+          >
+          <a class="text-sm text-secondary hover:text-primary" href="#"
+            >Others</a
+          >
+        </div>
+      </footer>
+    </main>
+
+    <div class="fixed bottom-10 right-10 z-60">
+      <button
+        onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
+        class="bg-primary text-on-primary w-14 h-14 rounded-full shadow-lg flex items-center justify-center hover:scale-110 transition-transform active:scale-95"
+      >
+        <span class="material-symbols-outlined">arrow_upward</span>
+      </button>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
