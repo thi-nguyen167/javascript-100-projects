@@ -10,6 +10,7 @@
   --color-secondary: #5e5e5f;
   --color-outline-variant: #c4c7c8;
   --color-surface-container: #f1edec;
+  --color-error: red;
 
   /* Spacing */
   --spacing-max-width: 1200px;
