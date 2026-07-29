@@ -13,17 +13,16 @@
   <body
     class="font-body-md text-body-md overflow-x-hidden bg-background text-primary"
   >
-    <main class="min-h-screen bg-background flex flex-col w-full">
+    <main class="min-h-screen flex flex-col w-full">
       <header
-        class="sticky top-0 w-full h-20 bg-background/80 backdrop-blur-md border-b border-outline-variant flex justify-between items-center px-margin-desktop z-40"
+        class="sticky top-0 w-full h-20 bg-background/90 backdrop-blur-md border-b border-outline-variant flex items-center px-6 md:px-margin-desktop z-50"
       >
-        <div class="flex items-center gap-8">
-          <a
-            href="#"
-            class="font-headline-md text-headline-md text-primary font-bold"
-            >JS Journal</a
-          >
-        </div>
+        <a
+          href="../index.html"
+          class="font-headline-md text-headline-md text-primary font-bold hover:scale-105 transition-all tracking-tight"
+        >
+          JS100
+        </a>
       </header>
 
       <section
@@ -49,9 +48,9 @@
       </section>
 
       <section
-        class="px-margin-desktop pb-8 border-b border-outline-variant flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6"
+        class="px-margin-mobile lg:px-margin-desktop pb-8 border-b border-outline-variant flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6"
       >
-        <div class="flex flex-wrap gap-3">
+        <div class="px-2 flex flex-wrap gap-3">
           <button
             data-filter="all"
             class="filter-btn px-4 py-1.5 rounded-full border border-primary bg-primary text-on-primary font-label-xs uppercase tracking-widest text-[10px] transition-colors"
@@ -132,30 +131,35 @@
       ></section>
 
       <footer
-        class="px-margin-desktop py-16 flex flex-col md:flex-row justify-between border-t border-outline-variant mt-24"
+        class="px-6 md:px-margin-desktop py-16 flex flex-col md:flex-row justify-between border-t border-outline-variant mt-auto bg-surface-container-low/30"
       >
         <div>
-          <p class="font-headline-md text-primary">JS Journal</p>
-          <p class="font-label-xs text-secondary mt-2">
-            100 JAVASCRIPT PROJECT CHALLENGE FROM BEGINNER TO ADVANCED. <br />
-            DESIGNED AND DEVELOPED BY THI NGUYEN 2026.
+          <p class="font-headline-md text-primary font-bold">JS100</p>
+          <p
+            class="font-label-xs text-[10px] text-secondary mt-2 tracking-widest uppercase"
+          >
+            100 JAVASCRIPT PROJECT CHALLENGE.<br />
+            DESIGNED & DEVELOPED BY THI NGUYEN 2026.
           </p>
         </div>
 
-        <div class="flex flex-col gap-2 mt-8 md:mt-0">
-          <span
-            class="font-label-xs font-bold uppercase tracking-widest text-primary"
-            >Community</span
-          >
-          <a class="text-sm text-secondary hover:text-primary" href="#"
-            >Guidelines</a
-          >
-          <a class="text-sm text-secondary hover:text-primary" href="#"
-            >GitHub</a
-          >
-          <a class="text-sm text-secondary hover:text-primary" href="#"
-            >Others</a
-          >
+        <div class="flex gap-12 mt-8 md:mt-0">
+          <div class="flex flex-col gap-2">
+            <span
+              class="font-label-xs font-bold uppercase tracking-widest text-primary mb-2"
+              >Community</span
+            >
+            <a
+              class="text-xs font-label-xs uppercase tracking-widest text-secondary hover:text-primary transition-colors"
+              href="#"
+              >Guidelines</a
+            >
+            <a
+              class="text-xs font-label-xs uppercase tracking-widest text-secondary hover:text-primary transition-colors"
+              href="#"
+              >GitHub</a
+            >
+          </div>
         </div>
       </footer>
     </main>
