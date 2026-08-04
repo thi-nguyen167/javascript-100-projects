@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Hanken_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 
 // Configure the fonts
 const hanken = Hanken_Grotesk({
@@ -24,7 +26,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`light ${hanken.variable} ${jetbrains.variable} h-full antialiased`}
     >
       <body className="min-h-full font-body-md text-body-md overflow-x-hidden bg-background text-primary flex flex-col">
+        <Header />
         {children}
+        <Footer />
       </body>
     </html>
   );
