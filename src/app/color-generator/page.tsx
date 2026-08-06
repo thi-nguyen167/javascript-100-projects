@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { use, useState } from "react";
 import ProjectHeader from "../../../components/ProjectHeader";
 import { projectsData } from "../../../lib/data";
-import { Shuffle } from "lucide-react";
+import { Shuffle, Check, Copy } from "lucide-react";
 
 // Utility function to determine text color based on background brightness
 const getContrastColor = (hexCode: string) => {
@@ -18,6 +18,7 @@ const getContrastColor = (hexCode: string) => {
 export default function GenerateColor() {
   const [color, setColor] = useState<string>("#FFFFFF");
   const [colorsGenerated, setColorsGenerated] = useState<string[]>([]);
+  const [copied, setCopied] = useState<boolean>(false);
 
   const project = projectsData.find((p) => p.id === 2);
   if (!project) {
@@ -39,10 +40,22 @@ export default function GenerateColor() {
 
     // generated colors (take 5)
     setColorsGenerated([colorValue, ...colorsGenerated].slice(0, 5));
+    setCopied(false);
   };
 
   // Calculate dynamic text color for the main display
   const textColor = getContrastColor(color);
+
+  const handleCopy = async () => {
+    // interacting with the browser's clipboard
+    try {
+      await navigator.clipboard.writeText(color); // the browser's built-in Clipboard API to take whatever string is stored in the color variable and copy it to the user's system clipboard
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1000); // Revert back after a second
+    } catch (err) {
+      console.error("Failed to copy text: ", err);
+    }
+  };
 
   return (
     <section className="flex-1 w-full max-w-7xl mx-auto px-6 md:px-margin-desktop pt-16 pb-24 flex flex-col items-center mt-8 md:mt-12">
@@ -56,16 +69,13 @@ export default function GenerateColor() {
         <div className="md:col-span-8 flex flex-col gap-6">
           <div
             style={{ backgroundColor: color, color: textColor }} // Style the background and text color as the random hex code
-            className="w-full h-64 md:h-100 border border-outline-variant/20 rounded-2xl p-8 flex flex-col items-center justify-center shadow-sm relative transition-colors duration-300 group cursor-pointer"
+            className="w-full h-64 md:h-100 border border-outline-variant/20 rounded-2xl p-8 flex flex-col items-center justify-center shadow-sm relative transition-colors duration-300 group"
           >
             <span
               className="font-headline-xl text-[64px] md:text-[80px] font-extrabold text-on-background leading-none"
               id="color-value"
             >
               {color}
-            </span>
-            <span className="font-label-xs text-xs uppercase tracking-widest text-primary/60 mt-4 opacity-0 group-hover:opacity-100 transition-opacity">
-              Click to copy
             </span>
           </div>
 
@@ -80,10 +90,15 @@ export default function GenerateColor() {
             </button>
 
             <button
-              id="copy-btn"
-              className="w-fit px-8 py-4 font-label-xs uppercase tracking-widest font-bold flex items-center justify-center rounded-lg border border-outline-variant hover:border-primary transition-colors text-outline-variant hover:text-primary bg-background"
+              onClick={handleCopy}
+              className={`w-fit px-8 py-4 font-label-xs uppercase tracking-widest font-bold flex items-center justify-center gap-2 rounded-lg border transition-colors ${
+                copied
+                  ? "border-primary text-primary"
+                  : "border-outline-variant hover:border-primary text-outline-variant hover:text-primary bg-background"
+              }`}
             >
-              Click to copy
+              {copied ? <Check size={18} /> : <Copy size={18} />}
+              {copied ? "Copied!" : "Click to copy"}
             </button>
           </div>
         </div>
@@ -92,7 +107,7 @@ export default function GenerateColor() {
           <h3 className="font-label-xs text-[10px] uppercase tracking-widest text-secondary font-bold mb-6 border-b border-outline-variant pb-4">
             Recently Generated
           </h3>
-          <ul className="flex flex-col gap-3" id="color-list">
+          <ul className="flex flex-col gap-3">
             {colorsGenerated.map((color, index) => (
               <li
                 key={`${index}-${color}`}
