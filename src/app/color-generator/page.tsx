@@ -6,7 +6,7 @@ import { projectsData } from "../../../lib/data";
 import { Shuffle } from "lucide-react";
 
 export default function GenerateColor() {
-  const [color, setColor] = useState("#FFFFFF");
+  const [color, setColor] = useState<string>("#FFFFFF");
 
   const project = projectsData.find((p) => p.id === 2);
   if (!project) {
@@ -17,7 +17,15 @@ export default function GenerateColor() {
     );
   }
 
-  const generateRandomColor = () => {};
+  const generateRandomColor = () => {
+    const colorValue =
+      "#" +
+      Math.floor(Math.random() * 16777215) // Get random number up to max hex value (FFFFFF) - 16^6 -1
+        .toString(16) // Convert base-10 number to base-16 (hex) string
+        .padStart(6, "0") // Pad with zeros if less than 6 characters
+        .toUpperCase();
+    return setColor(colorValue);
+  };
 
   return (
     <section className="flex-1 w-full max-w-7xl mx-auto px-6 md:px-margin-desktop pt-16 pb-24 flex flex-col items-center mt-8 md:mt-12">
@@ -30,7 +38,7 @@ export default function GenerateColor() {
       <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-12 gap-8 my-8">
         <div className="md:col-span-8 flex flex-col gap-6">
           <div
-            id="displayColor"
+            style={{ backgroundColor: color }} // Style the background color as the random hex code
             className="w-full h-64 md:h-100 border border-outline-variant/20 rounded-2xl p-8 flex flex-col items-center justify-center shadow-sm relative transition-colors duration-300 group cursor-pointer"
           >
             <span
