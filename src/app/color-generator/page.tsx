@@ -96,6 +96,7 @@ export default function GenerateColor() {
             {colorsGenerated.map((color, index) => (
               <li
                 key={`${index}-${color}`}
+                onClick={() => setColor(color)}
                 className="flex flex-row items-center gap-4 group cursor-pointer hover:bg-surface-container/30 p-2 -ml-2 rounded-lg transition-colors"
               >
                 <div
