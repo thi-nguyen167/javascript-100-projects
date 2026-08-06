@@ -17,6 +17,7 @@ const getContrastColor = (hexCode: string) => {
 
 export default function GenerateColor() {
   const [color, setColor] = useState<string>("#FFFFFF");
+  const [colorsGenerated, setColorsGenerated] = useState<string[]>([]);
 
   const project = projectsData.find((p) => p.id === 2);
   if (!project) {
@@ -35,6 +36,9 @@ export default function GenerateColor() {
         .padStart(6, "0") // Pad with zeros if less than 6 characters
         .toUpperCase();
     setColor(colorValue);
+
+    // generated colors (take 5)
+    setColorsGenerated([colorValue, ...colorsGenerated].slice(0, 5));
   };
 
   // Calculate dynamic text color for the main display
@@ -88,7 +92,24 @@ export default function GenerateColor() {
           <h3 className="font-label-xs text-[10px] uppercase tracking-widest text-secondary font-bold mb-6 border-b border-outline-variant pb-4">
             Recently Generated
           </h3>
-          <ul className="flex flex-col gap-3" id="color-list"></ul>
+          <ul className="flex flex-col gap-3" id="color-list">
+            {colorsGenerated.map((color, index) => (
+              <li
+                key={`${index}-${color}`}
+                className="flex flex-row items-center gap-4 group cursor-pointer hover:bg-surface-container/30 p-2 -ml-2 rounded-lg transition-colors"
+              >
+                <div
+                  style={{ backgroundColor: color }}
+                  className="w-12 h-12 rounded-lg shadow-sm border border-outline-variant/30 shrink-0"
+                />
+                <div className="flex flex-col justify-center">
+                  <span className="text-primary font-bold text-sm uppercase">
+                    {color}
+                  </span>
+                </div>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>
