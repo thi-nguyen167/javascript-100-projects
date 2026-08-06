@@ -5,6 +5,16 @@ import ProjectHeader from "../../../components/ProjectHeader";
 import { projectsData } from "../../../lib/data";
 import { Shuffle } from "lucide-react";
 
+// Utility function to determine text color based on background brightness
+const getContrastColor = (hexCode: string) => {
+  const hex = hexCode.replace("#", "");
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
+  const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+  return yiq >= 128 ? "#000000" : "#FFFFFF";
+};
+
 export default function GenerateColor() {
   const [color, setColor] = useState<string>("#FFFFFF");
 
@@ -24,8 +34,11 @@ export default function GenerateColor() {
         .toString(16) // Convert base-10 number to base-16 (hex) string
         .padStart(6, "0") // Pad with zeros if less than 6 characters
         .toUpperCase();
-    return setColor(colorValue);
+    setColor(colorValue);
   };
+
+  // Calculate dynamic text color for the main display
+  const textColor = getContrastColor(color);
 
   return (
     <section className="flex-1 w-full max-w-7xl mx-auto px-6 md:px-margin-desktop pt-16 pb-24 flex flex-col items-center mt-8 md:mt-12">
@@ -38,11 +51,11 @@ export default function GenerateColor() {
       <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-12 gap-8 my-8">
         <div className="md:col-span-8 flex flex-col gap-6">
           <div
-            style={{ backgroundColor: color }} // Style the background color as the random hex code
+            style={{ backgroundColor: color, color: textColor }} // Style the background and text color as the random hex code
             className="w-full h-64 md:h-100 border border-outline-variant/20 rounded-2xl p-8 flex flex-col items-center justify-center shadow-sm relative transition-colors duration-300 group cursor-pointer"
           >
             <span
-              className="font-headline-xl text-[48px] md:text-[80px] font-extrabold text-on-background leading-none"
+              className="font-headline-xl text-[64px] md:text-[80px] font-extrabold text-on-background leading-none"
               id="color-value"
             >
               {color}
