@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import ProjectHeader from "../../../components/ProjectHeader";
 import { projectsData } from "../../../lib/data";
 import { Shuffle, Check, Copy } from "lucide-react";
@@ -21,27 +21,38 @@ export default function GenerateColor() {
   const [copied, setCopied] = useState<boolean>(false);
 
   const project = projectsData.find((p) => p.id === 2);
-  if (!project) {
-    return (
-      <div className="flex-1 flex items-center justify-center min-h-screen">
-        Project not found
-      </div>
-    );
-  }
 
-  const generateRandomColor = () => {
+  // Memoized function to generate a random color and update the history array
+  const generateRandomColor = useCallback(() => {
     const colorValue =
       "#" +
-      Math.floor(Math.random() * 16777215) // Get random number up to max hex value (FFFFFF) - 16^6 -1
-        .toString(16) // Convert base-10 number to base-16 (hex) string
-        .padStart(6, "0") // Pad with zeros if less than 6 characters
+      Math.floor(Math.random() * 16777215) // Generate a random number up to the max hex value (16^6 - 1)
+        .toString(16) // Convert the base-10 number to a base-16 (hex) string
+        .padStart(6, "0") // Ensure the string is always exactly 6 characters long
         .toUpperCase();
+
+    // Update the main display color
     setColor(colorValue);
 
-    // generated colors (take 5)
-    setColorsGenerated([colorValue, ...colorsGenerated].slice(0, 5));
+    // Add the new color to the history state, keeping only the 5 most recent colors
+    setColorsGenerated((prev) => [colorValue, ...prev].slice(0, 5));
+
+    // Reset the clipboard UI feedback
     setCopied(false);
-  };
+  }, []);
+
+  // --- Effects ---
+  // Generate the initial random color on component mount
+  useEffect(() => {
+    // Push the state update to the end of the execution queue.
+    // This prevents synchronous cascading render warnings and Next.js hydration mismatch errors.
+    const timer = setTimeout(() => {
+      generateRandomColor();
+    }, 0);
+
+    // Cleanup the timeout if the component unmounts prematurely
+    return () => clearTimeout(timer);
+  }, [generateRandomColor]);
 
   // Calculate dynamic text color for the main display
   const textColor = getContrastColor(color);
@@ -56,6 +67,14 @@ export default function GenerateColor() {
       console.error("Failed to copy text: ", err);
     }
   };
+
+  if (!project) {
+    return (
+      <div className="flex-1 flex items-center justify-center min-h-screen">
+        Project not found
+      </div>
+    );
+  }
 
   return (
     <section className="flex-1 w-full max-w-7xl mx-auto px-6 md:px-margin-desktop pt-16 pb-24 flex flex-col items-center mt-8 md:mt-12">
