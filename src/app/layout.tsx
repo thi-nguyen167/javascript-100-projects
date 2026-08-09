@@ -29,10 +29,12 @@ export default function RootLayout({
       lang="en"
       className={`light ${hanken.variable} ${jetbrains.variable} h-full antialiased`}
     >
-      <body className="min-h-full font-body-md text-body-md overflow-x-hidden bg-background text-primary flex flex-col">
-        <Header />
-        {children}
-        <Footer />
+      <body className="overflow-x-hidden font-body-md text-body-md bg-background text-primary flex flex-col">
+        <main className="min-h-screen flex flex-col w-full">
+          <Header />
+          {children}
+          <Footer />
+        </main>
       </body>
     </html>
   );
