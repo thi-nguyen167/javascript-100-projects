@@ -1,10 +1,50 @@
 "use client";
 
+import { useState, useEffect, useMemo } from "react";
 import ProjectHeader from "../../../components/ProjectHeader";
 import { projectsData } from "../../../lib/data";
+import { TIMEZONE_OPTIONS } from "../../../lib/timezone";
+
+const getLocalTimeZone = (): string => {
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone;
+  } catch {
+    return "UTC";
+  }
+};
+
+const formatTime = ({ date, timeZone }: { date: Date; timeZone: string }) => {
+  return new Intl.DateTimeFormat("en-GB", {
+    timeZone,
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+  }).format(date);
+};
 
 export default function WorldClock() {
   const project = projectsData.find((p) => p.id === 3);
+
+  const [now, setNow] = useState<Date>(new Date());
+
+  const localTimeZone = useMemo(() => getLocalTimeZone(), []);
+  const localZoneInfo = useMemo(
+    () =>
+      TIMEZONE_OPTIONS.find((tz) => tz.value === localTimeZone) ?? {
+        label: localTimeZone,
+        value: localTimeZone,
+        city: localTimeZone.split("/").pop()?.replace("_", " ") ?? "Local",
+        country: "",
+      },
+    [localTimeZone],
+  );
+
+  useEffect(() => {
+    const interval = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   if (!project) {
     return (
       <div className="flex-1 flex items-center justify-center min-h-screen">
@@ -43,7 +83,8 @@ export default function WorldClock() {
                 Current Location
               </span>
               <h3 className="font-headline-md text-headline-md mt-1">
-                Berlin, Germany
+                {localZoneInfo.city}
+                {localZoneInfo.country ? `, ${localZoneInfo.country}` : ""}
               </h3>
             </div>
             <div className="text-right">
@@ -60,7 +101,7 @@ export default function WorldClock() {
               className="time-display font-headline-xl text-8xl md:text-9xl leading-none font-extrabold tracking-tighter"
               id="main-clock"
             >
-              13:20:06
+              {formatTime({ date: now, timeZone: localTimeZone })}
             </div>
           </div>
         </div>

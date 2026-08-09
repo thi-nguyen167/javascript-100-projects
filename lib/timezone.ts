@@ -1,11 +1,11 @@
-interface TimeZoneOption {
+export interface TimeZoneOption {
   label: string;
   value: string; // IANA timezone identifier
   city: string;
   country: string;
 }
 
-const TIMEZONE_OPTIONS: TimeZoneOption[] = [
+export const TIMEZONE_OPTIONS: TimeZoneOption[] = [
   {
     label: "UTC +00:00 (London)",
     value: "Europe/London",
