@@ -34,7 +34,7 @@ export default function WorldClock() {
         </button>
       </div>
 
-      <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-12 gap-8 my-8">
+      <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-12 gap-8 my-8">
         {/* Clock */}
         <div className="col-span-12 lg:col-span-8 p-12 flex flex-col justify-between h-120 bg-on-primary border border-outline-variant shadow-lg">
           <div className="flex justify-between items-start">
@@ -57,7 +57,7 @@ export default function WorldClock() {
           </div>
           <div className="py-12">
             <div
-              className="time-display font-headline-xl text-[140px] leading-none font-extrabold tracking-tighter"
+              className="time-display font-headline-xl text-8xl md:text-9xl leading-none font-extrabold tracking-tighter"
               id="main-clock"
             >
               13:20:06
