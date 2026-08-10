@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import ProjectHeader from "../../../components/ProjectHeader";
 import { projectsData } from "../../../lib/data";
-import { TIMEZONE_OPTIONS } from "../../../lib/timezone";
+import { TIMEZONE_OPTIONS, type TimeZoneOption } from "../../../lib/timezone";
 
 const getLocalTimeZone = (): string => {
   try {
@@ -32,12 +32,33 @@ const formatDate = ({ date, timeZone }: { date: Date; timeZone: string }) => {
   }).format(date);
 };
 
+const getZone = ({ date, timeZone }: { date: Date; timeZone: string }) => {
+  try {
+    const parts = new Intl.DateTimeFormat("en-US", {
+      timeZone,
+      timeZoneName: "short",
+    }).formatToParts(date);
+    const tzPart = parts.find((p) => p.type === "timeZoneName");
+    return tzPart?.value ?? timeZone;
+  } catch {
+    return "timeZone";
+  }
+};
+
 export default function WorldClock() {
   const project = projectsData.find((p) => p.id === 3);
 
-  const [now, setNow] = useState<Date>(new Date());
-
   const localTimeZone = useMemo(() => getLocalTimeZone(), []);
+
+  const [now, setNow] = useState<Date>(new Date());
+  const [selectedZoneValue, setSelectedZoneValue] = useState<string>(
+    TIMEZONE_OPTIONS.find((tz) => tz.value !== localTimeZone)?.value ??
+      TIMEZONE_OPTIONS[0].value,
+  );
+  const [zones, setZones] = useState<TimeZoneOption[]>([
+    TIMEZONE_OPTIONS.find((tz) => tz.value === "America/New_York") ??
+      TIMEZONE_OPTIONS[2],
+  ]);
 
   const localZoneInfo = useMemo(
     () =>
@@ -54,6 +75,19 @@ export default function WorldClock() {
     const interval = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(interval);
   }, []);
+
+  // Add Zone
+  const handleAddZone = useCallback(() => {
+    const zoneToAdd = TIMEZONE_OPTIONS.find(
+      (tz) => tz.value === selectedZoneValue,
+    );
+    if (!zoneToAdd) return;
+    if (zoneToAdd.value === localTimeZone) return; // skip duplicate of "current location"
+    setZones((prev) => {
+      if (prev.some((z) => z.value === zoneToAdd.value)) return prev;
+      return [...prev, zoneToAdd];
+    });
+  }, [selectedZoneValue, localTimeZone]);
 
   if (!project) {
     return (
@@ -73,13 +107,21 @@ export default function WorldClock() {
 
       {/* Filter time zone */}
       <div className="flex gap-4">
-        <select className="appearance-none bg-surface border border-outline-variant px-6 py-3 rounded-lg font-label-xs focus:ring-0 focus:border-primary cursor-pointer">
-          <option>UTC +00:00 (London)</option>
-          <option>UTC +01:00 (Paris/Local)</option>
-          <option>UTC -05:00 (New York)</option>
-          <option>UTC +09:00 (Tokyo)</option>
+        <select
+          value={selectedZoneValue}
+          onChange={(e) => setSelectedZoneValue(e.target.value)}
+          className="appearance-none bg-surface border border-outline-variant px-6 py-3 rounded-lg font-label-xs focus:ring-0 focus:border-primary cursor-pointer"
+        >
+          {TIMEZONE_OPTIONS.map((tz) => (
+            <option key={tz.value} value={tz.value}>
+              {tz.label}
+            </option>
+          ))}
         </select>
-        <button className="bg-primary text-white px-8 py-3 rounded-lg font-label-xs hover:opacity-90 transition-opacity">
+        <button
+          onClick={handleAddZone}
+          className="bg-primary text-white px-8 py-3 rounded-lg font-label-xs hover:opacity-90 transition-opacity"
+        >
           Add Zone
         </button>
       </div>
@@ -118,27 +160,43 @@ export default function WorldClock() {
 
         {/* List countries */}
         <ul className="col-span-12 lg:col-span-4 flex flex-col gap-6">
-          <li className="p-8 bg-on-primary flex justify-between items-center group cursor-pointer overflow-hidden  transition-border duration-300 hover:border hover:border-outline-variant ease-in-out">
-            <div>
-              <span className="uppercase font-code-sm text-xs md:text-sm tracking-widest text-secondary">
-                New York
-              </span>
-              <h4 className="font-headline-md text-headline-md text-on-surface mt-1">
-                EDT
-              </h4>
-            </div>
-            <div className="text-right">
-              <div
-                className="time-display font-headline-md text-headline-md font-bold"
-                id="clock-ny"
-              >
-                15:20
+          {zones.length === 0 && (
+            <li className="p-8 bg-on-primary text-center font-body-md text-secondary">
+              No zones added yet. Pick one above and hit &ldquo;Add Zone&rdquo;.
+            </li>
+          )}
+          {zones.map((zone) => (
+            <li
+              key={zone.value}
+              className="p-8 bg-on-primary flex justify-between items-center group cursor-pointer overflow-hidden transition-border duration-300 hover:border hover:border-outline-variant ease-in-out"
+            >
+              <div>
+                <span className="uppercase font-code-sm text-xs md:text-sm tracking-widest text-secondary">
+                  {zone.city}
+                </span>
+                <h4 className="font-headline-md text-headline-md text-on-surface mt-1">
+                  {getZone({ date: now, timeZone: zone.value })}
+                </h4>
               </div>
-              <span className="uppercase font-code-sm text-xs md:text-sm tracking-widest text-secondary">
-                -6 Hours
-              </span>
-            </div>
-          </li>
+              <div className="flex items-center gap-4">
+                <div className="text-right">
+                  <div className="font-headline-md text-headline-md font-bold">
+                    15:20
+                  </div>
+                  <span className="uppercase font-code-sm text-xs md:text-sm tracking-widest text-secondary">
+                    -6 Hours
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  aria-label={`Remove ${zone.city}`}
+                  className="opacity-0 group-hover:opacity-100 transition-opacity text-error text-xl leading-none"
+                >
+                  ×
+                </button>
+              </div>
+            </li>
+          ))}
         </ul>
       </div>
     </section>
