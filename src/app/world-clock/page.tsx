@@ -23,12 +23,22 @@ const formatTime = ({ date, timeZone }: { date: Date; timeZone: string }) => {
   }).format(date);
 };
 
+const formatDate = ({ date, timeZone }: { date: Date; timeZone: string }) => {
+  return new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  }).format(date);
+};
+
 export default function WorldClock() {
   const project = projectsData.find((p) => p.id === 3);
 
   const [now, setNow] = useState<Date>(new Date());
 
   const localTimeZone = useMemo(() => getLocalTimeZone(), []);
+
   const localZoneInfo = useMemo(
     () =>
       TIMEZONE_OPTIONS.find((tz) => tz.value === localTimeZone) ?? {
@@ -92,7 +102,7 @@ export default function WorldClock() {
                 Date
               </span>
               <p className="font-body-md font-bold mt-1" id="current-date">
-                July 28, 2026
+                {formatDate({ date: now, timeZone: localTimeZone })}
               </p>
             </div>
           </div>
