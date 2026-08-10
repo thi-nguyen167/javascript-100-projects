@@ -45,6 +45,21 @@ const getZone = ({ date, timeZone }: { date: Date; timeZone: string }) => {
   }
 };
 
+const formatShortTime = ({
+  date,
+  timeZone,
+}: {
+  date: Date;
+  timeZone: string;
+}) => {
+  return new Intl.DateTimeFormat("en-GB", {
+    timeZone,
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).format(date);
+};
+
 export default function WorldClock() {
   const project = projectsData.find((p) => p.id === 3);
 
@@ -181,8 +196,9 @@ export default function WorldClock() {
               <div className="flex items-center gap-4">
                 <div className="text-right">
                   <div className="font-headline-md text-headline-md font-bold">
-                    15:20
+                    {formatShortTime({ date: now, timeZone: zone.value })}
                   </div>
+
                   <span className="uppercase font-code-sm text-xs md:text-sm tracking-widest text-secondary">
                     -6 Hours
                   </span>
