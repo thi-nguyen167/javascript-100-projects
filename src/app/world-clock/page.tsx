@@ -60,6 +60,63 @@ const formatShortTime = ({
   }).format(date);
 };
 
+// DST-aware UTC offset (in minutes) for a timezone at a given instant.
+const getOffsetMinutes = ({
+  date,
+  timeZone,
+}: {
+  date: Date;
+  timeZone: string;
+}) => {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    hour12: false,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  }).formatToParts(date);
+
+  const map: Record<string, string> = {};
+  parts.forEach((p) => {
+    if (p.type !== "literal") map[p.type] = p.value;
+  });
+
+  const asUTC = Date.UTC(
+    Number(map.year),
+    Number(map.month) - 1,
+    Number(map.day),
+    Number(map.hour) === 24 ? 0 : Number(map.hour),
+    Number(map.minute),
+    Number(map.second),
+  );
+
+  return (asUTC - date.getTime()) / 60000;
+};
+
+const getRelativeOffsetLabel = ({
+  date,
+  targetZone,
+  localZone,
+}: {
+  date: Date;
+  targetZone: string;
+  localZone: string;
+}) => {
+  const diffMinutes =
+    getOffsetMinutes({ date, timeZone: targetZone }) -
+    getOffsetMinutes({ date, timeZone: localZone });
+
+  if (diffMinutes === 0) return "Same time";
+
+  const hours = diffMinutes / 60;
+  const sign = hours > 0 ? "+" : "";
+  const rounded = Number.isInteger(hours) ? hours : Math.round(hours * 2) / 2;
+  return `${sign}${rounded} Hour${Math.abs(rounded) === 1 ? "" : "s"}`;
+};
+
 export default function WorldClock() {
   const project = projectsData.find((p) => p.id === 3);
 
@@ -200,7 +257,11 @@ export default function WorldClock() {
                   </div>
 
                   <span className="uppercase font-code-sm text-xs md:text-sm tracking-widest text-secondary">
-                    -6 Hours
+                    {getRelativeOffsetLabel({
+                      date: now,
+                      targetZone: zone.value,
+                      localZone: localTimeZone,
+                    })}
                   </span>
                 </div>
                 <button
