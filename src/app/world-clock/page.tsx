@@ -161,6 +161,10 @@ export default function WorldClock() {
     });
   }, [selectedZoneValue, localTimeZone]);
 
+  const handleRemoveZone = useCallback((value: string) => {
+    setZones((prev) => prev.filter((z) => z.value !== value));
+  }, []);
+
   if (!project) {
     return (
       <div className="flex-1 flex items-center justify-center min-h-screen">
@@ -266,6 +270,10 @@ export default function WorldClock() {
                 </div>
                 <button
                   type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleRemoveZone(zone.value);
+                  }}
                   aria-label={`Remove ${zone.city}`}
                   className="opacity-0 group-hover:opacity-100 transition-opacity text-error text-xl leading-none"
                 >
