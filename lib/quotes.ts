@@ -120,7 +120,7 @@ export const quotesData: Quote[] = [
     author: "Isaac Newton",
     category: "Science",
     imageUrl:
-      "https://images.unsplash.com/photo-1447433583501-b51786f9af3b?auto=format&fit=crop&q=80&w=1000",
+      "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&q=80&w=1000",
   },
 
   // --- Perseverance & Hard Work ---
@@ -154,7 +154,7 @@ export const quotesData: Quote[] = [
     author: "Winston Churchill",
     category: "Perseverance",
     imageUrl:
-      "https://images.unsplash.com/photo-1483366774565-c78efb8f43eb?auto=format&fit=crop&q=80&w=1000",
+      "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&q=80&w=1000",
   },
   {
     id: "per-5",
