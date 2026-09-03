@@ -1,5 +1,6 @@
 export interface QuizQuestion {
   id: number;
+  category: string;
   question: string;
   codeSnippet?: string;
   options: string[];
@@ -7,150 +8,150 @@ export interface QuizQuestion {
   explanation: string;
 }
 
-export const advancedJsQuiz: QuizQuestion[] = [
+export const Quiz: QuizQuestion[] = [
   {
     id: 1,
-    question: "What is a closure in JavaScript?",
-    options: [
-      "A method to prevent variables from being garbage collected by deleting them.",
-      "A function combined with its lexical environment, remembering its outer scope.",
-      "A strict mode feature that prevents variables from leaking into the global scope.",
-      "A function that takes another function as an argument.",
-    ],
+    category: "JavaScript Engines",
+    question: "What is the output of the following asynchronous code?",
+    codeSnippet: `console.log('A');
+setTimeout(() => console.log('B'), 0);
+Promise.resolve().then(() => console.log('C'));
+console.log('D');`,
+    options: ["A, B, C, D", "A, D, C, B", "A, D, B, C", "A, C, D, B"],
     correctAnswerIndex: 1,
     explanation:
-      "A closure is formed when a function is bundled together with references to its surrounding state (the lexical environment). It allows an inner function to access an outer function's scope even after the outer function has returned.",
+      "Promises use the microtask queue, which is prioritized and processed completely before the macrotask queue used by setTimeout. Thus, 'C' logs before 'B'.",
   },
   {
     id: 2,
-    question: "What is the output of the following code?",
-    codeSnippet: `for (var i = 0; i < 3; i++) {
-  setTimeout(() => console.log(i), 1000);
-}`,
+    category: "React Architecture",
+    question:
+      "Why is it considered dangerous to use an array's `index` as a `key` in a React list?",
     options: [
-      "0, 1, 2",
-      "3, 3, 3",
-      "Undefined, Undefined, Undefined",
-      "1, 2, 3",
+      "It causes the application to crash.",
+      "React cannot parse numbers as keys.",
+      "It can cause bugs with component state if the list items are reordered, inserted, or deleted.",
+      "It bypasses the Virtual DOM entirely.",
     ],
-    correctAnswerIndex: 1,
+    correctAnswerIndex: 2,
     explanation:
-      "Because `var` is function-scoped, there is only one shared `i`. By the time the `setTimeout` callbacks execute, the loop has finished and `i` has incremented to 3.",
+      "If the list order changes, React might reuse the old DOM elements and internal state for the wrong items because the keys (indices) remained the same.",
   },
   {
     id: 3,
+    category: "Next.js App Router",
     question:
-      "How can we fix the previous `var` loop to correctly output `0, 1, 2` without changing `var` to `let`?",
+      "In the Next.js App Router, what is the default rendering behavior of a newly created component?",
     options: [
-      "Define `i` as a global variable outside the loop.",
-      "Remove the 1000ms delay in `setTimeout`.",
-      "Wrap the `setTimeout` in an IIFE, passing `i` as an argument.",
-      "It is impossible without using `let`.",
-    ],
-    correctAnswerIndex: 2,
-    explanation:
-      "An Immediately Invoked Function Expression (IIFE) creates a new function scope for every iteration, capturing the current value of `i` in a new variable.",
-  },
-  {
-    id: 4,
-    question: "What does this code log to the console?",
-    codeSnippet: `let a = 1;
-function foo() {
-  console.log(a);
-  let a = 2;
-}
-foo();`,
-    options: ["1", "2", "undefined", "ReferenceError"],
-    correctAnswerIndex: 3,
-    explanation:
-      "The `let a = 2` declaration is hoisted to the top of `foo`'s scope, but remains in the Temporal Dead Zone (TDZ). Accessing it before initialization throws a ReferenceError.",
-  },
-  {
-    id: 5,
-    question:
-      "Consider the Module Pattern below. What does `counter.count` return?",
-    codeSnippet: `const counter = (function() {
-  let count = 0;
-  return {
-    up: () => ++count,
-    value: () => count
-  };
-})();
-counter.count;`,
-    options: ["0", "1", "undefined", "null"],
-    correctAnswerIndex: 2,
-    explanation:
-      "The module pattern creates private variables using closures. `count` is only accessible inside the IIFE and through the returned methods. Directly accessing it on the object returns `undefined`.",
-  },
-  {
-    id: 6,
-    question: "What is the output of the following code?",
-    codeSnippet: `function createAdder(x) {
-  return function(y) {
-    return x + y;
-  };
-}
-const add5 = createAdder(5);
-console.log(add5(3));`,
-    options: ["5", "3", "8", "undefined"],
-    correctAnswerIndex: 2,
-    explanation:
-      "The inner function forms a closure that captures `x` from `createAdder`. When `add5(3)` is called, it adds the captured `x` (5) and the passed `y` (3).",
-  },
-  {
-    id: 7,
-    question: "What will be logged to the console?",
-    codeSnippet: `var x = 10;
-(function() {
-  console.log(x);
-  var x = 20;
-})();`,
-    options: ["10", "20", "undefined", "ReferenceError"],
-    correctAnswerIndex: 2,
-    explanation:
-      "Inside the IIFE, `var x` is hoisted to the top of the function scope, but its initialization (`= 20`) is not. Therefore, `x` exists in the local scope but is `undefined` when logged.",
-  },
-  {
-    id: 8,
-    question:
-      "Do closures in JavaScript capture the values of variables, or their references (bindings)?",
-    options: [
-      "They capture the exact values at the time the closure is created.",
-      "They capture references to the variables, meaning they see updates made after creation.",
-      "They create deep copies of the outer scope.",
-      "They capture values for primitives, and references for objects.",
+      "It is a Client Component.",
+      "It is a React Server Component (RSC).",
+      "It is statically generated at build time, but hydrates completely on the client.",
+      "It throws an error unless you add 'use client' or 'use server'.",
     ],
     correctAnswerIndex: 1,
     explanation:
-      "Closures capture variable bindings (references), not just their values. This is why in a loop with `var`, all setTimeout callbacks log the final updated value of the shared variable.",
+      "By default, all components in the Next.js App Router are Server Components. They render exclusively on the server and send zero JavaScript to the client unless you explicitly opt-in with 'use client'.",
+  },
+  {
+    id: 4,
+    category: "TypeScript",
+    question:
+      "In TypeScript, what is a primary difference between an `interface` and a `type` alias?",
+    options: [
+      "Interfaces can only be used for classes, while types are for functions.",
+      "Interfaces can be re-opened and merged (declaration merging), while types are closed.",
+      "Types compile to JavaScript objects, while interfaces are erased.",
+      "There is no difference; they are strictly identical under the hood.",
+    ],
+    correctAnswerIndex: 1,
+    explanation:
+      "Interfaces support 'declaration merging', meaning you can declare the same interface multiple times and TypeScript will merge them. Type aliases cannot be changed once declared.",
+  },
+  {
+    id: 5,
+    category: "CSS Layouts",
+    question:
+      "Which CSS layout strategy is best suited for controlling both rows and columns simultaneously?",
+    options: [
+      "Flexbox",
+      "CSS Grid",
+      "Block formatting context",
+      "Float layout",
+    ],
+    correctAnswerIndex: 1,
+    explanation:
+      "Flexbox is inherently designed for 1-dimensional layouts (either a row OR a column). CSS Grid is specifically built to handle complex 2-dimensional layouts (both rows AND columns at the same time).",
+  },
+  {
+    id: 6,
+    category: "Web Performance",
+    question:
+      "What does the term 'Hydration' refer to in modern web frameworks like Next.js?",
+    options: [
+      "Minifying and compressing JavaScript files for faster downloads.",
+      "Caching database queries on the edge network.",
+      "The process of attaching React event listeners to the static HTML sent from the server.",
+      "Pre-loading images before they enter the viewport.",
+    ],
+    correctAnswerIndex: 2,
+    explanation:
+      "Hydration is the process where React 'wakes up' the static, non-interactive HTML sent by the server, attaching event listeners and state to make it a fully interactive Single Page Application.",
+  },
+  {
+    id: 7,
+    category: "React Hooks",
+    question:
+      "What happens if you provide an empty dependency array `[]` to a `useEffect` hook?",
+    options: [
+      "The effect runs after every single render.",
+      "The effect only runs once when the component mounts.",
+      "The effect never runs.",
+      "The effect causes an infinite loop.",
+    ],
+    correctAnswerIndex: 1,
+    explanation:
+      "An empty dependency array tells React that the effect does not depend on any changing state or props, so it only needs to execute exactly once upon the initial mount.",
+  },
+  {
+    id: 8,
+    category: "TypeScript",
+    question:
+      "What does the `<T>` represent in the following TypeScript function?",
+    codeSnippet: `function identity<T>(arg: T): T {
+  return arg;
+}`,
+    options: [
+      "A specific built-in type for text.",
+      "A syntax error; T is not defined.",
+      "A generic type variable that captures and preserves the type the user provides.",
+      "An HTML tag indicating template output.",
+    ],
+    correctAnswerIndex: 2,
+    explanation:
+      "Generics (`<T>`) allow you to create reusable components that adapt to a variety of types rather than a single hardcoded one, ensuring type safety is maintained throughout the function execution.",
   },
   {
     id: 9,
-    question: "What is the output of the following code?",
-    codeSnippet: `for (let i = 0; i < 3; i++) {
-  setTimeout(() => console.log(i), 0);
-}`,
+    category: "Web Accessibility (a11y)",
+    question:
+      "Which HTML attribute should you use to hide a decorative icon from screen readers?",
     options: [
-      "0, 1, 2",
-      "3, 3, 3",
-      "1, 2, 3",
-      "Undefined, Undefined, Undefined",
-    ],
-    correctAnswerIndex: 0,
-    explanation:
-      "Because `let` is block-scoped, a new lexical environment (and a fresh binding of `i`) is created for each iteration of the loop. Thus, each closure captures a distinct `i`.",
-  },
-  {
-    id: 10,
-    question: "Which of the following is NOT a common use case for closures?",
-    options: [
-      "Data privacy (Emulating private methods)",
-      "Currying and partial application",
-      "Event handlers and callbacks",
-      "Enhancing the performance of global variables",
+      "alt=''",
+      "aria-hidden='true'",
+      "role='presentation'",
+      "Both aria-hidden='true' for SVGs, or an empty alt='' for images.",
     ],
     correctAnswerIndex: 3,
     explanation:
-      "Closures are excellent for data privacy, currying, and callbacks, but they consume memory by keeping outer scopes alive and do not enhance global variable performance.",
+      'Using `aria-hidden="true"` on inline SVGs/icons or an empty `alt=""` tag on an image tells assistive technologies to completely ignore the element, keeping the screen reader experience clean.',
+  },
+  {
+    id: 10,
+    category: "JavaScript Quirks",
+    question: "What is the result of `typeof null` in JavaScript?",
+    options: ["'null'", "'undefined'", "'object'", "'boolean'"],
+    correctAnswerIndex: 2,
+    explanation:
+      "`typeof null` returning `'object'` is a well-known, historical bug in JavaScript from its original implementation in 1995 that was never fixed in order to avoid breaking legacy websites.",
   },
 ];
