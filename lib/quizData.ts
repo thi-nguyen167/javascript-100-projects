@@ -14,9 +14,9 @@ export const Quiz: QuizQuestion[] = [
     category: "JavaScript Engines",
     question: "What is the output of the following asynchronous code?",
     codeSnippet: `console.log('A');
-setTimeout(() => console.log('B'), 0);
-Promise.resolve().then(() => console.log('C'));
-console.log('D');`,
+    setTimeout(() => console.log('B'), 0);
+    Promise.resolve().then(() => console.log('C'));
+    console.log('D');`,
     options: ["A, B, C, D", "A, D, C, B", "A, D, B, C", "A, C, D, B"],
     correctAnswerIndex: 1,
     explanation:
