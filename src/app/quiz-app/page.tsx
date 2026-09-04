@@ -169,6 +169,25 @@ export default function QuizApp() {
             </div>
           )}
         </div>
+        {/* Summary result */}
+        <div className="mt-12 max-w-2xl w-full grid grid-cols-1 md:grid-cols-3 gap-gutter opacity-60">
+          <div className="p-4 border-l-2 border-outline-variant">
+            <span className="font-label-xs uppercase block mb-1">
+              Time Remaining
+            </span>
+            <span className="font-headline-md text-sm">14:22</span>
+          </div>
+          <div className="p-4 border-l-2 border-outline-variant">
+            <span className="font-label-xs uppercase block mb-1">Accuracy</span>
+            <span className="font-headline-md text-sm">88%</span>
+          </div>
+          <div className="p-4 border-l-2 border-outline-variant">
+            <span className="font-label-xs uppercase block mb-1">
+              Current Streak
+            </span>
+            <span className="font-headline-md text-sm">4 correct</span>
+          </div>
+        </div>
       </div>
     </section>
   );
